@@ -1,9 +1,11 @@
 package ie.davidloftus.huffman.tree;
 
 import ie.davidloftus.huffman.BitInputStream;
+import ie.davidloftus.huffman.BitOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
@@ -17,13 +19,27 @@ public class HuffmanTree {
         this.rootNode = rootNode;
     }
 
-    public static HuffmanTree fromFile(InputStream inputStream) throws IOException {
+    public static HuffmanTree readFromFile(InputStream inputStream) throws IOException {
         BitInputStream bitInputStream = new BitInputStream(inputStream);
-
-        HuffmanTree huffmanTree = new HuffmanTree(TreeNode.fromFile(bitInputStream));
+        HuffmanTree huffmanTree = readFromFile(bitInputStream);
 
         bitInputStream.flush();
+
         return huffmanTree;
+    }
+
+    public static HuffmanTree readFromFile(BitInputStream bitInputStream) throws IOException {
+        return new HuffmanTree(TreeNode.readFromFile(bitInputStream));
+    }
+
+    public void writeToFile(OutputStream outputStream) throws IOException {
+        BitOutputStream bitOutputStream = new BitOutputStream(outputStream);
+        writeToFile(bitOutputStream);
+        bitOutputStream.flush();
+    }
+
+    public void writeToFile(BitOutputStream bitOutputStream) throws IOException {
+        rootNode.writeToFile(bitOutputStream);
     }
 
     public static HuffmanTree generateFromInput(byte[] inputData) {

@@ -1,6 +1,9 @@
 package ie.davidloftus.huffman.tree;
 
 import ie.davidloftus.huffman.BitInputStream;
+import ie.davidloftus.huffman.BitOutputStream;
+
+import java.io.IOException;
 
 class LeafNode implements TreeNode {
 
@@ -13,6 +16,11 @@ class LeafNode implements TreeNode {
     @Override
     public int getNextWord(BitInputStream input) {
         return word;
+    }
+
+    @Override
+    public void writeToFile(BitOutputStream outputStream) throws IOException {
+        outputStream.writeWord(word, HuffmanTree.BITS_PER_WORD);
     }
 
 }
