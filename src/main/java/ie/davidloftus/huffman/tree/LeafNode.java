@@ -24,4 +24,11 @@ class LeafNode implements TreeNode {
         outputStream.writeWord(word, HuffmanTree.BITS_PER_WORD);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeafNode leafNode = (LeafNode) o;
+        return word == leafNode.word;
+    }
 }

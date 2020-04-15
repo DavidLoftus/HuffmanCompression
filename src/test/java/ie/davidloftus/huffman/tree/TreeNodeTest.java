@@ -70,6 +70,18 @@ class TreeNodeTest {
     }
 
     @Test
-    void readFromFile() {
+    void readFromFile() throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[]{-56, 36, 34, 24});
+        BitInputStream bitInputStream = new BitInputStream(inputStream);
+
+        TreeNode leafNodeA = new LeafNode('A');
+        TreeNode leafNodeB = new LeafNode('B');
+        TreeNode internalNodeAB = new InternalNode(leafNodeA, leafNodeB);
+        TreeNode leafNodeC = new LeafNode('C');
+        TreeNode internalNodeABC = new InternalNode(internalNodeAB, leafNodeC);
+
+        TreeNode nodeFromFile = TreeNode.readFromFile(bitInputStream);
+
+        assertEquals(internalNodeABC, nodeFromFile);
     }
 }

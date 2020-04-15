@@ -4,6 +4,7 @@ import ie.davidloftus.huffman.BitInputStream;
 import ie.davidloftus.huffman.BitOutputStream;
 
 import java.io.IOException;
+import java.util.Objects;
 
 class InternalNode implements TreeNode {
     private TreeNode left;
@@ -24,5 +25,14 @@ class InternalNode implements TreeNode {
         outputStream.write(true);
         left.writeToFile(outputStream);
         right.writeToFile(outputStream);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InternalNode that = (InternalNode) o;
+        return Objects.equals(left, that.left) &&
+                Objects.equals(right, that.right);
     }
 }
