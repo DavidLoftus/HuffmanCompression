@@ -20,6 +20,7 @@ class LeafNode implements TreeNode {
 
     @Override
     public void writeToFile(BitOutputStream outputStream) throws IOException {
+        outputStream.write(false);
         outputStream.writeWord(word, HuffmanTree.BITS_PER_WORD);
     }
 
