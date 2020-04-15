@@ -57,4 +57,18 @@ class BitInputStreamTest {
     @Test
     void close() throws IOException {
     }
+
+    @Test
+    void readWord() throws IOException {
+        int[] bytes = {0xFF, 0x55, 0x96, 0x00};
+
+        doReturn(bytes[0], bytes[1], bytes[2], bytes[3], -1).when(inputStream).read();
+
+        assertEquals(31, bitInputStream.readWord(5));
+        verify(inputStream, times(1)).read();
+
+        assertEquals(29, bitInputStream.readWord(5));
+        verify(inputStream, times(1)).read();
+
+    }
 }

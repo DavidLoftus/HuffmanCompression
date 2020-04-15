@@ -49,4 +49,28 @@ public class BitInputStream {
         return ret;
     }
 
+    public long readWord(int bits) throws IOException {
+        assert bits < 64;
+
+        if (bits <= currentBit+1) {
+            return readFromBuffer(bits);
+        }
+
+        long ret = byteBuffer;
+        bits -= currentBit;
+
+        while (bits >= 8) {
+            ret = ret << 8 | nextByte();
+            bits -= 8;
+        }
+
+        flush();
+
+        if (bits > 0) {
+            nextByte();
+            ret = ret << bits | readFromBuffer(bits);
+        }
+
+        return ret;
+    }
 }
