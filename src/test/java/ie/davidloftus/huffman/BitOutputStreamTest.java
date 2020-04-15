@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -27,10 +28,30 @@ class BitOutputStreamTest {
 
     @Test
     void write() throws IOException {
-        for (int i = 0; i < 8; ++i) {
-            bitOutputStream.write(true);
+        int[] bytes = {0xFF, 0x55, 0x96, 0x00};
+        byte[] bits = {1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0};
+
+        for (byte bit : bits) {
+            bitOutputStream.write(bit == 1);
         }
-        verify(outputStream, times(1)).write(255);
+        verify(outputStream).write(bytes[0]);
+        verify(outputStream).write(bytes[1]);
+        verify(outputStream).write(bytes[2]);
+        verify(outputStream).write(bytes[3]);
+    }
+
+    @Test
+    void writeBit() throws IOException {
+        int[] bytes = {0xFF, 0x55, 0x96, 0x00};
+        byte[] bits = {1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0};
+
+        for (byte bit : bits) {
+            bitOutputStream.writeBit(bit);
+        }
+        verify(outputStream).write(bytes[0]);
+        verify(outputStream).write(bytes[1]);
+        verify(outputStream).write(bytes[2]);
+        verify(outputStream).write(bytes[3]);
     }
 
     @Test
