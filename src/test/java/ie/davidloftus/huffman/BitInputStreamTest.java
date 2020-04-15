@@ -68,7 +68,7 @@ class BitInputStreamTest {
         verify(inputStream, times(1)).read();
 
         assertEquals(29, bitInputStream.readWord(5));
-        verify(inputStream, times(1)).read();
+        verify(inputStream, times(2)).read();
 
     }
 }

@@ -28,7 +28,6 @@ public class BitInputStream {
         if (currentBit == -1) {
             nextByte();
         }
-        currentBit--;
         return (byte) (byteBuffer >> currentBit-- & 1);
     }
 
@@ -44,7 +43,7 @@ public class BitInputStream {
     private long readFromBuffer(int bits) {
         assert bits <= currentBit+1;
 
-        long ret = byteBuffer & (1 << bits - 1);
+        long ret = (byteBuffer >> (currentBit-bits+1)) & ((1 << bits) - 1);
         currentBit -= bits;
         return ret;
     }
@@ -56,8 +55,8 @@ public class BitInputStream {
             return readFromBuffer(bits);
         }
 
-        long ret = byteBuffer;
-        bits -= currentBit;
+        bits -= currentBit+1;
+        long ret = readFromBuffer(currentBit+1);
 
         while (bits >= 8) {
             ret = ret << 8 | nextByte();
@@ -68,7 +67,7 @@ public class BitInputStream {
 
         if (bits > 0) {
             nextByte();
-            ret = ret << bits | readFromBuffer(bits);
+            ret = (ret << bits) | readFromBuffer(bits);
         }
 
         return ret;
