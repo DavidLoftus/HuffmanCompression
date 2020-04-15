@@ -12,6 +12,7 @@ import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @ExtendWith(MockitoExtension.class)
 class BitInputStreamTest {
 
@@ -27,12 +28,26 @@ class BitInputStreamTest {
 
     @Test
     void read() throws IOException {
-        doReturn(255).when(inputStream).read();
-        when(inputStream.read()).thenReturn(255);
-        for (int i = 0; i < 8; ++i) {
-            assertTrue(bitInputStream.read());
+        int[] bytes = {0xFF, 0x55, 0x96, 0x00};
+        int[] bits = {1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0};
+
+        doReturn(bytes[0], bytes[1], bytes[2], bytes[3], -1).when(inputStream).read();
+        for (int i = 0; i < 32; ++i) {
+            assertEquals(bits[i]==1, bitInputStream.read());
         }
-        verify(inputStream, times(1)).read();
+        verify(inputStream, times(4)).read();
+    }
+
+    @Test
+    void readBit() throws IOException {
+        int[] bytes = {0xFF, 0x55, 0x96, 0x00};
+        int[] bits = {1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0};
+
+        doReturn(bytes[0], bytes[1], bytes[2], bytes[3], -1).when(inputStream).read();
+        for (int i = 0; i < 32; ++i) {
+            assertEquals(bits[i], bitInputStream.readBit());
+        }
+        verify(inputStream, times(4)).read();
     }
 
     @Test
