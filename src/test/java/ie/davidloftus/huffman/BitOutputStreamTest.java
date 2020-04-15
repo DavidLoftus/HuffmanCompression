@@ -61,4 +61,14 @@ class BitOutputStreamTest {
     @Test
     void close() {
     }
+
+    @Test
+    void writeWord() throws IOException {
+        bitOutputStream.writeWord(31, 5);
+        bitOutputStream.writeWord(29, 5);
+        bitOutputStream.flush();
+
+        verify(outputStream).write(0xFF);
+        verify(outputStream).write(0x40);
+    }
 }

@@ -41,6 +41,22 @@ public class BitOutputStream implements Closeable {
         outputStream.close();
     }
 
-    public void writeWord(long word, int bitsPerWord) throws IOException {
+    public void writeWord(long word, int bits) throws IOException {
+        assert bits <= 64;
+
+        while (bitsInUnfilledByte != 0 && bits > 0) {
+            bits--;
+            writeBit((byte) ((word >> bits) & 1));
+        }
+
+        while (bits >= 8) {
+            outputStream.write((int) ((word >> (bits - 8)) & 0xff));
+            bits -= 8;
+        }
+
+        while (bits > 0) {
+            bits--;
+            writeBit((byte) ((word >> bits) & 1));
+        }
     }
 }

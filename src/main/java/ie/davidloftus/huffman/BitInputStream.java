@@ -49,7 +49,7 @@ public class BitInputStream {
     }
 
     public long readWord(int bits) throws IOException {
-        assert bits < 64;
+        assert bits <= 64;
 
         if (bits <= currentBit+1) {
             return readFromBuffer(bits);
