@@ -10,7 +10,11 @@ public class BitString {
     private int size;
 
     public BitString() {
-        this(new long[0], 0);
+        this(new long[1], 0);
+    }
+
+    public BitString(BitString other) {
+        this(Arrays.copyOf(other.bitWords, (int)Math.ceil(other.size / (float)BITS_PER_WORD)), other.size);
     }
 
     public BitString(long[] bitWords, int size) {
@@ -64,6 +68,11 @@ public class BitString {
         growToFit(size+1);
         size++;
         setBit(size-1, val);
+    }
+
+    public void removeLast() {
+        setBit(size-1, 0);
+        size--;
     }
 
     @Override

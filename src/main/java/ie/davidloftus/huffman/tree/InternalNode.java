@@ -2,6 +2,7 @@ package ie.davidloftus.huffman.tree;
 
 import ie.davidloftus.huffman.BitInputStream;
 import ie.davidloftus.huffman.BitOutputStream;
+import ie.davidloftus.huffman.BitString;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,6 +26,17 @@ class InternalNode implements TreeNode {
         outputStream.write(true);
         left.writeToFile(outputStream);
         right.writeToFile(outputStream);
+    }
+
+    @Override
+    public void fillCodeBook(BitString[] codeBook, BitString prefix) {
+        prefix.add(0);
+        right.fillCodeBook(codeBook, prefix);
+        prefix.removeLast();
+
+        prefix.add(1);
+        left.fillCodeBook(codeBook, prefix);
+        prefix.removeLast();
     }
 
     @Override

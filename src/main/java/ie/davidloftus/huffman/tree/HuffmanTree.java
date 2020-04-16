@@ -16,19 +16,11 @@ public class HuffmanTree {
 
     private TreeNode rootNode;
 
-    private BitString[] codeBook;
+    private BitString[] codeBook = new BitString[256];
 
     private HuffmanTree(TreeNode rootNode) {
         this.rootNode = rootNode;
-        this.codeBook = generateCodeBook();
-    }
-
-    private BitString[] generateCodeBook() {
-        BitString[] codeBook = new BitString[256];
-
-        // TODO: traverse through rootNode to generate codeBook
-
-        return codeBook;
+        rootNode.fillCodeBook(codeBook);
     }
 
     public static HuffmanTree readFromFile(InputStream inputStream) throws IOException {
