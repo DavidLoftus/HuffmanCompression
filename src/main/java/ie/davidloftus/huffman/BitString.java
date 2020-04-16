@@ -75,4 +75,8 @@ public class BitString {
         sb.append('"');
         return sb.toString();
     }
+
+    public long getWord(int i) {
+        return bitWords[i];
+    }
 }

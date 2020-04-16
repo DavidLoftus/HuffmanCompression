@@ -15,6 +15,10 @@ public class BitOutputStream implements Closeable {
         this.outputStream = outputStream;
     }
 
+    public void redirect(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
     public void writeBit(int bit) throws IOException {
         unfilledByte = (unfilledByte << 1) | bit;
         bitsInUnfilledByte++;
@@ -38,7 +42,6 @@ public class BitOutputStream implements Closeable {
     @Override
     public void close() throws IOException {
         flush();
-        outputStream.close();
     }
 
     public void writeWord(long word, int bits) throws IOException {
@@ -57,6 +60,17 @@ public class BitOutputStream implements Closeable {
         while (bits > 0) {
             bits--;
             writeBit((int) ((word >> bits) & 1));
+        }
+    }
+
+    public void write(BitString bits) throws IOException {
+        int fullWords = bits.size() / BitString.BITS_PER_WORD;
+        for (int i = 0; i < fullWords; ++i) {
+            writeWord(bits.getWord(i), BitString.BITS_PER_WORD);
+        }
+        int remainingBits = bits.size() % BitString.BITS_PER_WORD;
+        if (remainingBits != 0) {
+            writeWord(bits.getWord(fullWords) >> (BitString.BITS_PER_WORD - remainingBits), remainingBits);
         }
     }
 }
