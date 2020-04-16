@@ -24,7 +24,7 @@ public class BitInputStream {
         return byteBuffer;
     }
 
-    public byte readBit() throws IOException {
+    public int readBit() throws IOException {
         if (currentBit == -1) {
             nextByte();
         }
