@@ -7,7 +7,8 @@ import ie.davidloftus.huffman.BitString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class HuffmanTree {
@@ -47,12 +48,17 @@ public class HuffmanTree {
     }
 
     public static HuffmanTree generateFromInput(byte[] inputData) {
+        if (inputData.length == 0) {
+            return new HuffmanTree(new LeafNode(0));
+        }
+
         class FrequencyTreePair implements Comparable<FrequencyTreePair> {
             TreeNode node;
-            int frequency = 0;
+            int frequency;
 
-            public FrequencyTreePair(TreeNode node) {
+            public FrequencyTreePair(TreeNode node, int frequency) {
                 this.node = node;
+                this.frequency = frequency;
             }
 
             @Override
@@ -61,16 +67,20 @@ public class HuffmanTree {
             }
         }
 
-        FrequencyTreePair[] nodes = new FrequencyTreePair[256];
-        for (int i = 0; i < 256; i++) {
-            nodes[i] = new FrequencyTreePair(new LeafNode(i));
-        }
-
+        int[] frequencies = new int[256];
         for (byte inputByte : inputData) {
-            nodes[inputByte & 0xff].frequency++;
+            frequencies[inputByte & 0xff]++;
         }
 
-        PriorityQueue<FrequencyTreePair> priorityQueue = new PriorityQueue<>(Arrays.asList(nodes));
+
+        List<FrequencyTreePair> nodes = new ArrayList<>();
+        for (int i = 0; i < frequencies.length; ++i) {
+            if (frequencies[i] > 0) {
+                nodes.add(new FrequencyTreePair(new LeafNode(i), frequencies[i]));
+            }
+        }
+
+        PriorityQueue<FrequencyTreePair> priorityQueue = new PriorityQueue<>(nodes);
 
         while (priorityQueue.size() >= 2) {
             FrequencyTreePair rightPair = priorityQueue.poll();
@@ -84,7 +94,14 @@ public class HuffmanTree {
         }
 
         assert !priorityQueue.isEmpty();
-        return new HuffmanTree(priorityQueue.poll().node);
+        TreeNode node = priorityQueue.poll().node;
+
+        if (node instanceof LeafNode) {
+            // Can't have LeafNode as root, no zero length encoding allowed.
+            node = new InternalNode(node, node);
+        }
+
+        return new HuffmanTree(node);
     }
 
     public int getNextWord(BitInputStream inputStream) throws IOException {
