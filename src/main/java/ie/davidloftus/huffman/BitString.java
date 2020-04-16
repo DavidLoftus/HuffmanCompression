@@ -30,17 +30,17 @@ public class BitString {
         return (int) ((word >> i) & 1);
     }
 
-    private static int setBitInWord(long word, int i, int val) {
-        long mask = ~(1 << i);
+    private static long setBitInWord(long word, int i, int val) {
+        long mask = ~((long)1 << i);
         long bit = (long)val << i;
-        return (int) ((word & mask) | bit);
+        return (word & mask) | bit;
     }
 
     public int getBit(int i) {
         if (i < 0 || i >= size) {
             throw new IndexOutOfBoundsException();
         }
-        int wordIdx = i / BITS_PER_WORD, bitIdx = i % BITS_PER_WORD;
+        int wordIdx = i / BITS_PER_WORD, bitIdx = (BITS_PER_WORD - i - 1) % BITS_PER_WORD;
         return getBitFromWord(bitWords[wordIdx], bitIdx);
     }
 
@@ -51,7 +51,7 @@ public class BitString {
         if (val != 0 && val != 1) {
             throw new IllegalArgumentException("Non binary integer " + val + " given.");
         }
-        int wordIdx = i / BITS_PER_WORD, bitIdx = i % BITS_PER_WORD;
+        int wordIdx = i / BITS_PER_WORD, bitIdx = (BITS_PER_WORD - i - 1) % BITS_PER_WORD;
         bitWords[wordIdx] = setBitInWord(bitWords[wordIdx], bitIdx, val);
     }
 
