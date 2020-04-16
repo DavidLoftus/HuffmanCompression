@@ -33,9 +33,9 @@ public class BitOutputStream implements Closeable {
     }
 
     public void flush() throws IOException {
-        if (bitsInUnfilledByte > 0) {
-            outputStream.write(unfilledByte << (8 - bitsInUnfilledByte));
-            unfilledByte = bitsInUnfilledByte = 0;
+        writeBit(1);
+        while (bitsInUnfilledByte != 0) {
+            writeBit(0);
         }
     }
 

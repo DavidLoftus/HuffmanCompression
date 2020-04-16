@@ -69,6 +69,6 @@ class BitOutputStreamTest {
         bitOutputStream.flush();
 
         verify(outputStream).write(0xFF);
-        verify(outputStream).write(0x40);
+        verify(outputStream).write(0x60);
     }
 }

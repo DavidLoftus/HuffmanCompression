@@ -14,7 +14,7 @@ class TreeNodeTest {
 
     @Test
     void getNextWord() throws IOException {
-        byte[] bytes = {-72}; // 10111000
+        byte[] bytes = {-71}; // 10111001
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         BitInputStream bitInputStream = new BitInputStream(byteArrayInputStream);
 
@@ -48,7 +48,7 @@ class TreeNodeTest {
         leafNodeA.writeToFile(bitOutputStream);
         bitOutputStream.flush();
 
-        assertArrayEquals(new byte[]{0x20, -128}, byteArrayOutputStream.toByteArray());
+        assertArrayEquals(new byte[]{0x20, -64}, byteArrayOutputStream.toByteArray());
 
         TreeNode leafNodeB = new LeafNode('B');
         TreeNode internalNodeAB = new InternalNode(leafNodeA, leafNodeB);
@@ -57,7 +57,7 @@ class TreeNodeTest {
         internalNodeAB.writeToFile(bitOutputStream);
         bitOutputStream.flush();
 
-        assertArrayEquals(new byte[]{-112, 72, 64}, byteArrayOutputStream.toByteArray());
+        assertArrayEquals(new byte[]{-112, 72, 80}, byteArrayOutputStream.toByteArray());
 
         TreeNode leafNodeC = new LeafNode('C');
         TreeNode internalNodeABC = new InternalNode(internalNodeAB, leafNodeC);
@@ -66,12 +66,12 @@ class TreeNodeTest {
         internalNodeABC.writeToFile(bitOutputStream);
         bitOutputStream.flush();
 
-        assertArrayEquals(new byte[]{-56, 36, 34, 24}, byteArrayOutputStream.toByteArray());
+        assertArrayEquals(new byte[]{-56, 36, 34, 28}, byteArrayOutputStream.toByteArray());
     }
 
     @Test
     void readFromFile() throws IOException {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[]{-56, 36, 34, 24});
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[]{-56, 36, 34, 28});
         BitInputStream bitInputStream = new BitInputStream(inputStream);
 
         TreeNode leafNodeA = new LeafNode('A');

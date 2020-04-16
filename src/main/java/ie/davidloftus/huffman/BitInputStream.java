@@ -10,29 +10,49 @@ public class BitInputStream {
 
     private int currentBit = -1;
     private int byteBuffer = 0;
+    private int tailByte;
 
-    public BitInputStream(InputStream inputStream) {
+    public BitInputStream(InputStream inputStream) throws IOException {
         this.inputStream = inputStream;
+        this.tailByte = inputStream.read();
     }
 
     private int nextByte() throws IOException {
-        byteBuffer = inputStream.read();
-        if (byteBuffer == -1) {
-            throw new EOFException();
+        if (tailByte == -1) {
+            return -1;
         }
+        byteBuffer = tailByte;
         currentBit = 7;
+        tailByte = inputStream.read();
+        if (tailByte == -1) {
+            // byteBuffer is last byte in stream
+            // this byte includes the number of bits in the byte
+            for (currentBit = 6; currentBit >= 0 && (byteBuffer & 1) == 0; --currentBit) {
+                byteBuffer >>>= 1;
+            }
+            byteBuffer >>>= 1;
+            if (currentBit == -1) {
+                return -1;
+            }
+        }
         return byteBuffer;
     }
 
     public int readBit() throws IOException {
         if (currentBit == -1) {
-            nextByte();
+            if (nextByte() == -1) {
+                return -1;
+            }
         }
         return (byte) (byteBuffer >> currentBit-- & 1);
     }
 
     public boolean read() throws IOException {
-        return readBit() != 0;
+        int bit = readBit();
+        if (bit == -1) {
+            throw new EOFException();
+        }
+        return bit != 0;
     }
 
     public void flush() {
@@ -59,14 +79,20 @@ public class BitInputStream {
         long ret = readFromBuffer(currentBit+1);
 
         while (bits >= 8) {
-            ret = ret << 8 | nextByte();
+            int nextByte = nextByte();
+            if (nextByte == -1) {
+                throw new EOFException();
+            }
+            ret = ret << 8 | nextByte;
             bits -= 8;
         }
 
         flush();
 
         if (bits > 0) {
-            nextByte();
+            if (nextByte() == -1) {
+                throw new EOFException();
+            }
             ret = (ret << bits) | readFromBuffer(bits);
         }
 
