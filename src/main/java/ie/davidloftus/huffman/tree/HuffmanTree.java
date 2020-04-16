@@ -2,6 +2,7 @@ package ie.davidloftus.huffman.tree;
 
 import ie.davidloftus.huffman.BitInputStream;
 import ie.davidloftus.huffman.BitOutputStream;
+import ie.davidloftus.huffman.BitString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +16,19 @@ public class HuffmanTree {
 
     private TreeNode rootNode;
 
+    private BitString[] codeBook;
+
     private HuffmanTree(TreeNode rootNode) {
         this.rootNode = rootNode;
+        this.codeBook = generateCodeBook();
+    }
+
+    private BitString[] generateCodeBook() {
+        BitString[] codeBook = new BitString[256];
+
+        // TODO: traverse through rootNode to generate codeBook
+
+        return codeBook;
     }
 
     public static HuffmanTree readFromFile(InputStream inputStream) throws IOException {
@@ -83,4 +95,11 @@ public class HuffmanTree {
         return new HuffmanTree(priorityQueue.poll().node);
     }
 
+    public int getNextWord(BitInputStream inputStream) throws IOException {
+        return rootNode.getNextWord(inputStream);
+    }
+
+    public BitString getBitsForWord(int b) {
+        return codeBook[b];
+    }
 }
