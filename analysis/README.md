@@ -78,7 +78,7 @@ reduce the memory usage when compressing large amounts of data.
 Here's a table of data for all the provided files. It includes the original size, the compressed size and
 the compression ratio and the times to compress/decompress in milliseconds.
 
-I also included compressed size using gnu gzip with highest compression level.
+I also included compressed size using gnu gzip with the highest compression level.
 You can see that huffman performs better than gzip for 2 of the files.
 
 | File            | Size    | Compressed size | Ratio  | GZIP size | GZIP ratio | Compression time | Decompression time |
@@ -88,4 +88,10 @@ You can see that huffman performs better than gzip for 2 of the files.
 | genomeVirus.txt |    6251 |            1568 | 3.9866 |      1901 |     3.2883 |        17.228 ms |         13.3770 ms |
 | medTale.txt     |    5632 |            2985 | 1.8868 |      2571 |     2.1906 |        21.852 ms |         14.1620 ms |
 
+When I compress mobydick.txt.hf again the compression ratio is only 1.01, this is because the entropy of the compressed
+is already very high due to the nature of huffman encoding. Eventually any attempt to compress a compressed file would
+only result in a larger file.
 
+Run length encoding manages to compress q32x48.bin to 143 bytes, with a compression ratio of 1.343.
+We can get a better compression ratio with huffman because there is only 20 different bytes used and, the 3 bytes
+0x00, 0xe0, 0x03 account for 75% of the data. This means we can encode most of the bytes in less than 3 bits.
