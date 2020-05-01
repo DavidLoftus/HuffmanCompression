@@ -41,12 +41,11 @@ class TreeNodeTest {
     void writeToFile() throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BitOutputStream bitOutputStream = new BitOutputStream(byteArrayOutputStream);
-
         TreeNode leafNodeA = new LeafNode('A');
 
-        leafNodeA.writeToFile(bitOutputStream);
-        bitOutputStream.flush();
+        try (BitOutputStream bitOutputStream = new BitOutputStream(byteArrayOutputStream)) {
+            leafNodeA.writeToFile(bitOutputStream);
+        }
 
         assertArrayEquals(new byte[]{0x20, -64}, byteArrayOutputStream.toByteArray());
 
@@ -54,8 +53,9 @@ class TreeNodeTest {
         TreeNode internalNodeAB = new InternalNode(leafNodeA, leafNodeB);
 
         byteArrayOutputStream.reset();
-        internalNodeAB.writeToFile(bitOutputStream);
-        bitOutputStream.flush();
+        try (BitOutputStream bitOutputStream = new BitOutputStream(byteArrayOutputStream)) {
+            internalNodeAB.writeToFile(bitOutputStream);
+        }
 
         assertArrayEquals(new byte[]{-112, 72, 80}, byteArrayOutputStream.toByteArray());
 
@@ -63,8 +63,9 @@ class TreeNodeTest {
         TreeNode internalNodeABC = new InternalNode(internalNodeAB, leafNodeC);
 
         byteArrayOutputStream.reset();
-        internalNodeABC.writeToFile(bitOutputStream);
-        bitOutputStream.flush();
+        try (BitOutputStream bitOutputStream = new BitOutputStream(byteArrayOutputStream)) {
+            internalNodeABC.writeToFile(bitOutputStream);
+        }
 
         assertArrayEquals(new byte[]{-56, 36, 34, 28}, byteArrayOutputStream.toByteArray());
     }
