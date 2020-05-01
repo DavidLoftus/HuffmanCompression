@@ -56,3 +56,19 @@ E 10
 
 joined together this is
 `000000100100000110110101000101100011011011001000111001010011001011010001100011110`
+
+### Task 2
+
+Task 2 was to write the Huffman encoding algorithm, you can find the code in the
+[ie.davidloftus.huffman](../src/main/java/ie/davidloftus/huffman)
+package.
+
+I made a HuffmanInputStream and HuffmanOutputStream inspired by the GZIPInputStream and GZIPOutputStream in the Java
+standard library. These classes can be used like regular input/output streams however when reading/writing they will
+convert to/from the huffman encoding.
+
+One issue with this method is that while one might expect by the interface to be able to stream data through these
+data types without incurring large memory usage. This is only true for HuffmanInputStream. HuffmanOutputStream needs to
+buffer all the data until the stream is closed so that it can build the optimal huffman tree. To fix this issue I added
+the ability to flush the HuffmanOutputStream. While this likely ends up with a non optimal huffman tree, it does
+reduce the memory usage when compressing large amounts of data.
