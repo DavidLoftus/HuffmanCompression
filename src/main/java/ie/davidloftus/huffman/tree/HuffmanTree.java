@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
+/**
+ * HuffmanTree holds the tree and codebook for encoding/decoding characters.
+ *
+ * Can be generated from data using generateFromInput() or read from a previously serialized file using readFromFile().
+ */
 public class HuffmanTree {
 
     public static final int BITS_PER_WORD = 8;
@@ -24,29 +29,30 @@ public class HuffmanTree {
         rootNode.fillCodeBook(codeBook);
     }
 
-    public static HuffmanTree readFromFile(InputStream inputStream) throws IOException {
-        BitInputStream bitInputStream = new BitInputStream(inputStream);
-        HuffmanTree huffmanTree = readFromFile(bitInputStream);
-
-        bitInputStream.flush();
-
-        return huffmanTree;
-    }
-
+    /**
+     * Reads a serialized HuffmanTree from a BitInputStream.
+     * @param bitInputStream the bits to read from
+     * @return a HuffmanTree object
+     * @throws IOException if any IO error occurs
+     */
     public static HuffmanTree readFromFile(BitInputStream bitInputStream) throws IOException {
         return new HuffmanTree(TreeNode.readFromFile(bitInputStream));
     }
 
-    public void writeToFile(OutputStream outputStream) throws IOException {
-        try (BitOutputStream bitOutputStream = new BitOutputStream(outputStream)) {
-            writeToFile(bitOutputStream);
-        }
-    }
-
+    /**
+     * Writes a serialized HuffmanTree to a BitOutputStream.
+     * @param bitOutputStream the output stream to write the bits to
+     * @throws IOException if any IO error occurs
+     */
     public void writeToFile(BitOutputStream bitOutputStream) throws IOException {
         rootNode.writeToFile(bitOutputStream);
     }
 
+    /**
+     * Generates a new HuffmanTree that is optimal for a given input.
+     * @param inputData the input to optimize the tree for
+     * @return a HuffmanTree that will minimally encoded inputData
+     */
     public static HuffmanTree generateFromInput(byte[] inputData) {
         if (inputData.length == 0) {
             return new HuffmanTree(new LeafNode(0));
@@ -104,10 +110,22 @@ public class HuffmanTree {
         return new HuffmanTree(node);
     }
 
+    /**
+     * Get next whole character from bitstream.
+     * @param inputStream bitstream to read from
+     * @return a single byte as an int
+     * @throws IOException if an io error occurs while reading
+     * @throws java.io.EOFException if there aren't enough bits
+     */
     public int getNextWord(BitInputStream inputStream) throws IOException {
         return rootNode.getNextWord(inputStream);
     }
 
+    /**
+     * Get the bitstring that represents a given byte.
+     * @param b the byte to encode
+     * @return a bitstring that would decode to b
+     */
     public BitString getBitsForWord(int b) {
         return codeBook[b];
     }
