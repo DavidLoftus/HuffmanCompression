@@ -18,7 +18,10 @@ To run the tests in IntelliJ simply click the "Gradle" tab on the right -> verif
 
 Documentation for classes can be found in the form of javadocs in the java source files.
 
+Additionally, the javadoc documentation can be viewed
+[here.](https://davidloftus.github.io/HuffmanCompression)
+
 ### Analysis
 
 Analysis of the performance and efficiency of this algorithm can be found in the
-[analysis](analysis/) subdirectory.
+[analysis](analysis) subdirectory.
