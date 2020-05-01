@@ -1,6 +1,6 @@
 # Algorithm Analysis
 
-### Task 1
+### Task 1 Code Huffman Tree of phrase by hand
 
 Here is a hand drawn huffman tree used to minimize the encoding for the string "There is no place like home"
 
@@ -57,7 +57,7 @@ E 10
 joined together this is
 `000000100100000110110101000101100011011011001000111001010011001011010001100011110`
 
-### Task 2
+### Task 2 Build your Huffman Compression Suite
 
 Task 2 was to write the Huffman encoding algorithm, you can find the code in the
 [ie.davidloftus.huffman](../src/main/java/ie/davidloftus/huffman)
@@ -72,3 +72,5 @@ data types without incurring large memory usage. This is only true for HuffmanIn
 buffer all the data until the stream is closed so that it can build the optimal huffman tree. To fix this issue I added
 the ability to flush the HuffmanOutputStream. While this likely ends up with a non optimal huffman tree, it does
 reduce the memory usage when compressing large amounts of data.
+
+### Task 3 Compression Analysis
