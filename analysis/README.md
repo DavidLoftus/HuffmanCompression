@@ -74,3 +74,18 @@ the ability to flush the HuffmanOutputStream. While this likely ends up with a n
 reduce the memory usage when compressing large amounts of data.
 
 ### Task 3 Compression Analysis
+
+Here's a table of data for all the provided files. It includes the original size, the compressed size and
+the compression ratio and the times to compress/decompress in milliseconds.
+
+I also included compressed size using gnu gzip with highest compression level.
+You can see that huffman performs better than gzip for 2 of the files.
+
+| File            | Size    | Compressed size | Ratio  | GZIP size | GZIP ratio | Compression time | Decompression time |
+|-----------------|---------|-----------------|--------|-----------|------------|------------------|--------------------|
+| q32x48.bin      |     192 |              98 | 1.9592 |       103 |     1.8641 |        11.851 ms |         11.7410 ms |
+| mobydick.txt    | 1191463 |          667648 | 1.7846 |    483746 |     2.4630 |      1222.296 ms |        395.6540 ms |
+| genomeVirus.txt |    6251 |            1568 | 3.9866 |      1901 |     3.2883 |        17.228 ms |         13.3770 ms |
+| medTale.txt     |    5632 |            2985 | 1.8868 |      2571 |     2.1906 |        21.852 ms |         14.1620 ms |
+
+
