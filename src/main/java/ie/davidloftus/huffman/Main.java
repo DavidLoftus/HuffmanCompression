@@ -17,12 +17,18 @@ public class Main {
     }
 
     public static void compressFile(String inputPath, String outputPath) {
+        long before = System.nanoTime();
+
         try (OutputStream outputStream = new HuffmanOutputStream(new FileOutputStream(outputPath))) {
             Files.copy(Paths.get(inputPath), outputStream);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+
+        long nanos = System.nanoTime() - before;
+
+        System.out.printf("compressFile(\"%s\", \"%s\") took %.3fms\n", inputPath, outputPath, nanos / 1e6);
     }
 
     public static void compressFile(String inputPath) {
@@ -30,12 +36,18 @@ public class Main {
     }
 
     public static void decompressFile(String inputPath, String outputPath) {
+        long before = System.nanoTime();
+
         try (InputStream inputStream = new HuffmanInputStream(new FileInputStream(inputPath))) {
             Files.copy(inputStream, Paths.get(outputPath), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+
+        long nanos = System.nanoTime() - before;
+
+        System.out.printf("decompressFile(\"%s\", \"%s\") took %.3fms\n", inputPath, outputPath, nanos / 1e6);
     }
 
     public static void decompressFile(String inputPath) {
