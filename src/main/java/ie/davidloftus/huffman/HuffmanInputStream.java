@@ -7,6 +7,11 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * HuffmanInputStream acts as a way to read from a huffman encoded InputStream.
+ * It will perform the decoding on the fly as the library user requests more data.
+ * This method is inspired from the GZIPInputStream from the Java standard library.
+ */
 public class HuffmanInputStream extends FilterInputStream {
 
     private BitInputStream bitInputStream;

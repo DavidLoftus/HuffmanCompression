@@ -7,6 +7,13 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * HuffmanOutputStream acts as a way to write data to an OutputStream but in an huffman encoded format.
+ * Written will be buffered in order to create the optimal huffman tree.
+ * Buffer is flushed either when the stream is closed, or the flush() method is called, after which subsequent calls to
+ * write will be directly written.
+ * This method is inspired from the GZIPOutputStream from the Java standard library.
+ */
 public class HuffmanOutputStream extends FilterOutputStream {
 
     private ByteArrayOutputStream byteBufferStream = new ByteArrayOutputStream();
