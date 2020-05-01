@@ -1,0 +1,7 @@
+.gradle/
+.idea/
+analysis/
+build/
+data/
+gradle/
+src/
