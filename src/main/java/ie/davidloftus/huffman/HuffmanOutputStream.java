@@ -39,7 +39,7 @@ public class HuffmanOutputStream extends FilterOutputStream {
             huffmanTree.writeToFile(bitOutputStream);
 
             for (byte word : data) {
-                bitOutputStream.write(huffmanTree.getBitsForWord(word));
+                bitOutputStream.write(huffmanTree.getBitsForWord(word & 0xff));
             }
 
             byteBufferStream = null;
