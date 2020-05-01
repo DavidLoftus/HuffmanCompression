@@ -38,9 +38,9 @@ public class HuffmanTree {
     }
 
     public void writeToFile(OutputStream outputStream) throws IOException {
-        BitOutputStream bitOutputStream = new BitOutputStream(outputStream);
-        writeToFile(bitOutputStream);
-        bitOutputStream.flush();
+        try (BitOutputStream bitOutputStream = new BitOutputStream(outputStream)) {
+            writeToFile(bitOutputStream);
+        }
     }
 
     public void writeToFile(BitOutputStream bitOutputStream) throws IOException {

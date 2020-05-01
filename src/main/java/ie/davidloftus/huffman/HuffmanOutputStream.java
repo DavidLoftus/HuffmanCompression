@@ -50,7 +50,7 @@ public class HuffmanOutputStream extends FilterOutputStream {
     @Override
     public void close() throws IOException {
         flush();
-        bitOutputStream.flush();
+        bitOutputStream.close();
         super.close();
     }
 }
