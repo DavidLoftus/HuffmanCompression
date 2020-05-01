@@ -2,6 +2,9 @@ package ie.davidloftus.huffman;
 
 import java.util.Arrays;
 
+/**
+ * BitString represents an arbitrary length array of bits in a compact format.
+ */
 public class BitString {
 
     public static final int BITS_PER_WORD = 64;
@@ -9,10 +12,17 @@ public class BitString {
     private long[] bitWords;
     private int size;
 
+    /**
+     * Constructs an empty BitString.
+     */
     public BitString() {
         this(new long[1], 0);
     }
 
+    /**
+     * Clones an existing BitString
+     * @param other bitstring to clone
+     */
     public BitString(BitString other) {
         this(Arrays.copyOf(other.bitWords, (int)Math.ceil(other.size / (float)BITS_PER_WORD)), other.size);
     }
@@ -36,6 +46,12 @@ public class BitString {
         return (word & mask) | bit;
     }
 
+    /**
+     * Gets the bit at position i in the BitString
+     * @param i the index into the BitString, 0 <= i < size()
+     * @return the bit at position i
+     * @throws IndexOutOfBoundsException if i is an invalid index
+     */
     public int getBit(int i) {
         if (i < 0 || i >= size) {
             throw new IndexOutOfBoundsException();
@@ -44,6 +60,13 @@ public class BitString {
         return getBitFromWord(bitWords[wordIdx], bitIdx);
     }
 
+    /**
+     * Sets the bit at position i in the BitString to val
+     * @param i the index into the BitString, 0 <= i < size()
+     * @param val the bit value to set, should be 0 or 1.
+     * @throws IndexOutOfBoundsException if i is an invalid index
+     * @throws IllegalArgumentException if val is not 0 or 1
+     */
     public void setBit(int i, int val) {
         if (i < 0 || i >= size) {
             throw new IndexOutOfBoundsException();
@@ -61,6 +84,10 @@ public class BitString {
         }
     }
 
+    /**
+     * Adds a new bit at the end of the array
+     * @param val the bit to add can be 0 or 1
+     */
     public void add(int val) {
         if (val != 0 && val != 1) {
             throw new IllegalArgumentException("Non binary integer " + val + " given.");
